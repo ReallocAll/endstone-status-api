@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import inspect
 import time
 import unittest
 from collections import deque
@@ -9,10 +10,17 @@ from unittest.mock import Mock
 
 from endstone_status_api.config import APIConfig, EndpointsConfig
 from endstone_status_api.plugin import StatusAPI
+from endstone.event import Event, PlayerChatEvent
 from endstone_status_api.state import APIState
 
 
 class PluginTest(unittest.TestCase):
+    def test_chat_handler_uses_real_event_class(self):
+        # Endstone Plugin.register_events uses inspect.isclass(annotation).
+        annotation = inspect.signature(StatusAPI.on_player_chat).parameters["event"].annotation
+        self.assertIs(annotation, PlayerChatEvent)
+        self.assertTrue(issubclass(annotation, Event))
+
     def setup_plugin(self):
         players = [SimpleNamespace(name="Steve", unique_id="uuid-1", ping=55)]
         settings = APIConfig(endpoints=EndpointsConfig(players=True, chat=True))

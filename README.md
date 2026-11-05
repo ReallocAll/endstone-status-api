@@ -9,7 +9,7 @@ Public read-only HTTP JSON API for [Endstone](https://github.com/EndstoneMC/ends
 Python 3.10+ and Endstone 0.11+ required; `psutil>=5` is installed with the package. Install the published wheel into the **Python environment used by Endstone**:
 
 ```bash
-python -m pip install ./endstone_status_api-0.1.0-py3-none-any.whl
+python -m pip install ./endstone_status_api-0.1.1-py3-none-any.whl
 ```
 
 Restart Endstone after installation. Default bind is **127.0.0.1:19134**, not a public Internet address. Set up HTTPS via a reverse proxy/Tunnel, or deliberately use `host = "0.0.0.0"` if direct HTTP exposure is desired. Avoid running the old show-status HTTP listener on the same port.

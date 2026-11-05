@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-11-06)
+
+- Resolve PlayerChatEvent handler annotations at runtime for Endstone 0.11 event registration.
+- Add a regression check for the real Endstone listener signature contract.
+
 ## 0.1.0 (2026-11-05)
 
 - Initial independent public read-only Status API plugin, split from endstone-show-status.

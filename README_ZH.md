@@ -9,7 +9,7 @@
 要求 Python 3.10+、Endstone 0.11+；安装 wheel 会同时安装 `psutil>=5` 依赖。在 Endstone 使用的 Python 环境执行：
 
 ```bash
-python -m pip install ./endstone_status_api-0.1.0-py3-none-any.whl
+python -m pip install ./endstone_status_api-0.1.1-py3-none-any.whl
 ```
 
 安装后重启 Endstone。默认仅监听 `127.0.0.1:19134`，建议通过 HTTPS 反向代理或 Tunnel 对外公开。如需直接监听公网，将 `[http].host` 修改为 `0.0.0.0`。不可与旧版 show-status HTTP 服务同时占用相同端口。
