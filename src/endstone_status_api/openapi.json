@@ -1,0 +1,695 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Endstone Status API",
+    "version": "1.0.0",
+    "description": "Public read-only API. No authentication or credential-mode CORS. RFC3339 UTC timestamps; optional fields are omitted when disabled."
+  },
+  "paths": {
+    "/api/v1/info": {
+      "get": {
+        "summary": "Discover available public features",
+        "description": "No authentication. Disabled endpoints return 404; stale/unavailable snapshots return 503.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "ETag not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint disabled or missing",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No fresh data available",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/status": {
+      "get": {
+        "summary": "Current server status and performance",
+        "description": "No authentication. Disabled endpoints return 404; stale/unavailable snapshots return 503.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "ETag not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint disabled or missing",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No fresh data available",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/players": {
+      "get": {
+        "summary": "Online public players",
+        "description": "No authentication. Disabled endpoints return 404; stale/unavailable snapshots return 503.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayersResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "ETag not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint disabled or missing",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No fresh data available",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/history": {
+      "get": {
+        "summary": "Bounded recent history",
+        "description": "No authentication. Disabled endpoints return 404; stale/unavailable snapshots return 503.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "ETag not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint disabled or missing",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No fresh data available",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chat": {
+      "get": {
+        "summary": "Optional recent public broadcast chat",
+        "description": "No authentication. Disabled endpoints return 404; stale/unavailable snapshots return 503.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Requested count, default 20; capped by administrator max_messages.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current public data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "ETag not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Endpoint disabled or missing",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No fresh data available",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "summary": "API health; 503 when no fresh snapshot",
+        "responses": {
+          "200": {
+            "description": "Fresh snapshot available"
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "OpenAPI schema",
+        "responses": {
+          "200": {
+            "description": "OpenAPI 3.1 JSON document"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StatusResponse": {
+        "type": "object",
+        "required": [
+          "api_version",
+          "sampled_at",
+          "server"
+        ],
+        "properties": {
+          "api_version": {
+            "const": "v1"
+          },
+          "sampled_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "server": {
+            "type": "object",
+            "required": [
+              "online",
+              "players_online",
+              "players_max",
+              "uptime_seconds",
+              "performance"
+            ],
+            "properties": {
+              "online": {
+                "type": "boolean"
+              },
+              "players_online": {
+                "type": "integer"
+              },
+              "players_max": {
+                "type": "integer"
+              },
+              "uptime_seconds": {
+                "type": "integer"
+              },
+              "performance": {
+                "type": "object",
+                "properties": {
+                  "tps": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "Endstone average TPS"
+                  },
+                  "mspt": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "Endstone average MSPT, milliseconds"
+                  },
+                  "spark": {
+                    "type": "object",
+                    "properties": {
+                      "available": {
+                        "type": "boolean"
+                      },
+                      "tps_5s": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "mspt_10s_median": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "process_cpu_10s_percent": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "system_cpu_1m_percent": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "versions": {
+                "type": "object",
+                "properties": {
+                  "minecraft": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "endstone": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "process": {
+                "type": "object",
+                "properties": {
+                  "cpu_percent": {
+                    "type": "number",
+                    "description": "Percent of one logical CPU core (may exceed 100)"
+                  },
+                  "rss_bytes": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "system": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": [
+                    "integer",
+                    "number"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "PlayersResponse": {
+        "type": "object",
+        "required": [
+          "api_version",
+          "sampled_at",
+          "players"
+        ],
+        "properties": {
+          "api_version": {
+            "const": "v1"
+          },
+          "sampled_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "ping_ms"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "ping_ms": {
+                  "type": "integer",
+                  "description": "Milliseconds"
+                }
+              }
+            }
+          }
+        }
+      },
+      "HistoryResponse": {
+        "type": "object",
+        "required": [
+          "api_version",
+          "sampled_at",
+          "history_seconds",
+          "points"
+        ],
+        "properties": {
+          "api_version": {
+            "const": "v1"
+          },
+          "sampled_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "history_seconds": {
+            "type": "integer"
+          },
+          "points": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "timestamp",
+                "tps",
+                "mspt",
+                "players_online"
+              ],
+              "properties": {
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "tps": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "mspt": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "players_online": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "required": [
+          "api_version",
+          "limit",
+          "messages"
+        ],
+        "properties": {
+          "api_version": {
+            "const": "v1"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "timestamp",
+                "player",
+                "message"
+              ],
+              "properties": {
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "player": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InfoResponse": {
+        "type": "object",
+        "required": [
+          "api_version",
+          "server",
+          "endpoints"
+        ],
+        "properties": {
+          "api_version": {
+            "const": "v1"
+          },
+          "server": {
+            "type": "object",
+            "required": [
+              "name",
+              "address"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "address": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "endpoints": {
+            "type": "object",
+            "required": [
+              "status",
+              "players",
+              "history",
+              "chat"
+            ],
+            "properties": {
+              "status": {
+                "type": "boolean"
+              },
+              "players": {
+                "type": "boolean"
+              },
+              "history": {
+                "type": "boolean"
+              },
+              "chat": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
