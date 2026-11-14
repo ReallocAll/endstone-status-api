@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 (2026-11-14)
+
+- Fix malformed HTTP request handling before request headers are initialized, avoiding `AttributeError` and repeated server error logs.
+- Add socket-level regression tests for invalid HTTP/0.9 request types and invalid HTTP versions.
+- Keep the public v1 API contract, configuration, and required dependencies unchanged.
+
 ## 0.1.1 (2026-11-06)
 
 - Resolve PlayerChatEvent handler annotations at runtime for Endstone 0.11 event registration.
