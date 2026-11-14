@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import socket
 import threading
 import unittest
 from types import SimpleNamespace
@@ -88,6 +89,25 @@ class HTTPTest(unittest.TestCase):
                                                   "Access-Control-Request-Method": "GET"})
         self.assertEqual(code, 204)
         self.assertEqual(headers["Access-Control-Allow-Methods"], "GET, HEAD, OPTIONS")
+
+    def test_malformed_request_before_headers_are_parsed(self):
+        errors = []
+        self.api.logger.error = errors.append
+        for request_line in (b"POST /healthz\r\n\r\n", b"GET / HTTP/INVALID\r\n\r\n"):
+            with self.subTest(request_line=request_line):
+                with socket.create_connection(("127.0.0.1", self.http.server_port), timeout=3) as sock:
+                    sock.settimeout(3)
+                    sock.sendall(request_line)
+                    sock.shutdown(socket.SHUT_WR)
+                    response = bytearray()
+                    while chunk := sock.recv(4096):
+                        response.extend(chunk)
+                # HTTP/0.9 parse errors have no status line, but the
+                # configured problem+json body must still be sent.
+                body = bytes(response).split(b"\r\n\r\n")[-1]
+                self.assertEqual(json.loads(body)["status"], 400)
+        self.assertEqual(errors, [])
+        self.assertEqual(self.fetch("/api/v1/status")[0], 200)
 
     def test_stale_snapshot_is_unavailable_not_offline(self):
         self.api.max_stale_seconds = -1
