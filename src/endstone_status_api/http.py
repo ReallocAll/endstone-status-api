@@ -216,7 +216,7 @@ class APIHandler(BaseHTTPRequestHandler):
             self.send_header("X-Content-Type-Options", "nosniff")
             self.send_header("Referrer-Policy", "no-referrer")
             self.send_header("Connection", "close")
-            origin = self.headers.get("Origin")
+            origin = self.headers.get("Origin") if hasattr(self, "headers") else None
             allowed = self.server.plugin.settings.http.cors_origins
             if "*" in allowed:
                 self.send_header("Access-Control-Allow-Origin", "*")
